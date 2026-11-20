@@ -21,6 +21,8 @@ returns bigint language sql security definer set search_path = '' as $$
 $$;
 revoke all on function public.invoke_market_job() from public, anon, authenticated, service_role;
 
+-- Includes 22:15 UTC = 04:00 Asia/Kathmandu on the following Nepal date.
+-- Follow-up checks continue every 15 minutes, retaining the latest publication.
 select cron.schedule('nepal-metals-quarter-hour', '*/15 * * * *',
   'select public.invoke_market_job();');
 select cron.schedule('nepal-metals-cron-log-retention', '20 0 * * *',

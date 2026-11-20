@@ -4,6 +4,7 @@ import { db, check } from "@/lib/db";
 import { requireCron, errorResponse } from "@/lib/security";
 import { ingestSpot, ingestNews } from "@/lib/providers";
 import { dispatchDaily } from "@/lib/notifications";
+import { ingestNepal } from "@/lib/nepal-provider";
 export const maxDuration = 120;
 export async function GET(request: Request) {
   let owner: string | undefined;
@@ -18,6 +19,7 @@ export async function GET(request: Request) {
     });
     check(lease.error);
     if (!lease.data) return Response.json({ status: "already_running" });
+    const nepal = await ingestNepal();
     const spot = await ingestSpot();
     const news = await ingestNews();
     const notifications = await dispatchDaily();
@@ -34,6 +36,7 @@ export async function GET(request: Request) {
     );
     revalidateTag("public-market", { expire: 0 });
     return Response.json({
+      nepal,
       spot,
       news,
       notifications,
