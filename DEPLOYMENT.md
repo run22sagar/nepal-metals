@@ -33,7 +33,7 @@ Required for daily notifications:
 
 International data additionally requires `METALS_API_KEY` and `METALS_LICENSE_ACTIVE=true`. Enable `METALS_HISTORY_ALLOWED=true` only after confirming the subscription permits the intended retention and display. Turning the license flag off removes international data from the public application. Remove retained data when your agreement requires it.
 
-News is disabled by default. Set `NEWS_ALLOWED_HOSTS` to exact, trusted RSS domains for which headline republication permission has been established. Then enter feed URL, permission basis and terms URL in `/admin`. Redirects are rejected. Do not allow internal services or untrusted domains.
+News is disabled in a fresh installation until configured. The current production setup allows `www.eia.gov` and has the EIA Today in Energy RSS feed registered under Oil. [EIA's reuse policy](https://www.eia.gov/about/copyrights_reuse.php) permits attributed reuse of its own publications. The app retains headline, source, original publication date and original link only; no photos, logos or article bodies. Broken EIA detail links without an article ID are rejected. To add another source, establish permission, add its exact trusted hostname to `NEWS_ALLOWED_HOSTS`, and enter feed URL, permission basis and terms URL in `/admin`. Redirects are rejected. Do not allow internal services or untrusted domains.
 
 ## 3. GitHub and Vercel
 

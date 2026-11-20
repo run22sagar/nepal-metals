@@ -20,18 +20,18 @@
 - Public browser checks: the alert dialog is enabled, the English view showed no console errors, and the Nepali page rendered at 390px with correct document language and no horizontal body overflow.
 - No synthetic prices, headlines, subscriptions or test users were inserted into production. The sole Auth user is the owner's requested administrator account.
 - Source published to https://github.com/run22sagar/nepal-metals with the owner's approval for public visibility. GitHub Actions run 44696308488 passed npm installation, the 18 tests and production build. Generated private credentials were checked against all 84 tracked files before publication; no matches were found.
+- Automatic production deployment verified: pushing commit `27c6ce6` triggered Vercel deployment `dpl_FqDceddBy8n2BvagQhEwVeXqAmUg`, which reached READY.
+- EIA Today in Energy RSS registered through the authenticated, audited source workflow after reviewing its official reuse policy. Production ingestion succeeded at 07:42 UTC and stored six oil headlines with source and publication date. An invalid source link with a missing article ID was excluded; no broken EIA IDs were stored. The public server-rendered `/news` page contains the expected headline and original link. The linked November 12 article was checked against EIA's original page. Nepal/gold/silver news sources remain unconfigured.
 
 ## Not yet verified
 
-- Vercel's GitHub repository link is now configured to `run22sagar/nepal-metals`, production branch `main`. A repository-triggered deployment still needs verification after the next push.
 - No live Metals.Dev request has run with an account key. Adapter tests use isolated synthetic fixtures only.
 - No authorized automated FENEGOSIDA feed has been established. No official Nepal price records have been published.
-- No RSS source has been approved or ingested. News remains honestly empty.
 - No real browser push subscription or external push delivery has been tested. Worker tests use a simulated runtime and are not proof of device delivery.
 - Android/iPhone installation and real device delivery, production scheduler reliability, database restore, Lighthouse/Core Web Vitals and Search Console indexing remain launch checks.
 
 ## Remaining source setup
 
-Vercel and Supabase CLI authorization now works; account access is no longer the blocker. To enable international prices, the owner must supply a licensed Metals.Dev API key directly in Vercel's environment settings and confirm public-display rights before enabling the license flag. Nepal reference prices need verified publications and reproduction permission through the existing manual admin workflow. News needs a permitted RSS source. Device subscription and a requested test notification are still needed to establish real push delivery.
+Vercel and Supabase CLI authorization now works; account access is no longer the blocker. To enable international prices, the owner must supply a licensed Metals.Dev API key directly in Vercel's environment settings and confirm public-display rights before enabling the license flag. Nepal reference prices need verified publications and reproduction permission through the existing manual admin workflow. EIA oil news is active; other news categories need permitted sources. Device subscription and a requested test notification are still needed to establish real push delivery.
 
 See `DEPLOYMENT.md` for the exact remaining setup and verification sequence.
