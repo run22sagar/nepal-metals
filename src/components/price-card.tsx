@@ -67,7 +67,7 @@ export function PriceCard({
       </div>
       <div className="price-details">
         <div>
-          <span>{t.tenGrams}</span>
+          <span>{t.tenGrams} · {locale === "en" ? "converted" : "रूपान्तरित"}</span>
           <b>{price ? money(convert(price.amount, "tola", "10g")) : "—"}</b>
         </div>
         <div
@@ -124,7 +124,7 @@ export function PriceCard({
                 dateStyle: "medium",
                 timeStyle: "short",
               }).format(new Date(price.fetched_at))}{" "}
-              NPT · {locale === "en" ? "Manually verified" : "म्यानुअल प्रमाणित"}
+              NPT · {locale === "en" ? "Source verified" : "स्रोत प्रमाणित"}
             </small>
           </div>
         ) : (
