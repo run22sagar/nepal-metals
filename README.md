@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nepal Metals
 
-## Getting Started
+Next.js App Router application for Nepal's gold and silver reference prices, with English/Nepali pages, audited manual publishing, international spot estimates, history charts, calculators, RSS ingestion, PWA installation and consent-based web push.
 
-First, run the development server:
+**Status:** production build and local tests pass. No public production deployment, real price ingestion, news-feed permission or device push delivery has yet been verified. Empty states are deliberate; there are no fabricated market records.
 
-```bash
+## Run locally
+
+```powershell
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. Without server configuration, public routes render honest unavailable states and admin/alert operations stay disabled.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```powershell
+npm test
+npm run typecheck
+npm run build
+npm start
+# In another terminal while the app runs:
+npm run test:http
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the exact Supabase migrations, administrator setup, Vercel deployment, secrets, source permissions, scheduler, Search Console and device verification steps.
 
-## Learn More
+## Implementation
 
-To learn more about Next.js, take a look at the following resources:
+- Server-rendered price pages, bilingual canonical/hreflang URLs, sitemap, robots, Open Graph and visible FAQs.
+- Separate Nepal reference and international indicative data; exact units, timestamp attribution, explicit stale/unavailable states.
+- PostgreSQL constraints, RLS, atomic correction audits, provider logs, server-only keys and typed database schema.
+- Metals.Dev adapter with validation, bounded retries and caching; previous observations survive source failures. No unauthorized FENEGOSIDA retrieval.
+- Recharts history with explicit gaps, date filters and full-history pagination; responsive calculator and country comparisons.
+- Encrypted browser subscriptions, VAPID transport, device preferences and unsubscribe, Nepal-time scheduling, delivery deduplication, expired endpoint cleanup and receipt tracking.
+- Protected publishing desk, source management, subscription counts and delivery/audit inspection.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The root `AGENTS.md` identifies the installed Next.js documentation to consult before changes. Synthetic values exist only in isolated tests; migrations create no price fixtures.
