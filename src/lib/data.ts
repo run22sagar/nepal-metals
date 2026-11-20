@@ -20,7 +20,7 @@ function publicPrices(rows: Price[]): Price[] {
     revision: p.revision,
   }));
 }
-export const readMarket = cache(
+const cachedMarket =
   unstable_cache(
     async () => {
       const empty = {
@@ -35,7 +35,7 @@ export const readMarket = cache(
       try {
         const client = db();
         const [prices, history, spot, articles, sources] = await Promise.all([
-          client.rpc("latest_nepal_rates"),
+          client.rpc("latest_nepal_rates", undefined, { get: true }),
           client
             .from("price_observations")
             .select(publicPriceFields)
@@ -76,7 +76,8 @@ export const readMarket = cache(
                   : "ready",
         };
       } catch {
-        return { ...empty, status: "failed" };
+        // Throw so a transient failure cannot replace the last good cache entry.
+        throw new Error("Market data temporarily unavailable");
       }
     },
     [
@@ -85,5 +86,8 @@ export const readMarket = cache(
       process.env.METALS_LICENSE_ACTIVE || "false",
     ],
     { revalidate: 60, tags: ["public-market"] },
-  ),
-);
+  );
+export const readMarket = cache(async () => {
+  try { return await cachedMarket(); }
+  catch { return { prices: [] as Price[], history: [] as Price[], spot: null as Spot | null, articles: [] as Article[], newsStatus: "failed", status: "failed" }; }
+});

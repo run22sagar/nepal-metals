@@ -12,8 +12,18 @@ export function db() {
     {
       auth: { persistSession: false, autoRefreshToken: false },
       global: {
-        fetch: (input, init) =>
-          fetch(input, { ...init, signal: AbortSignal.timeout(12000) }),
+        fetch: async (input, init) => {
+          const read = !init?.method || init.method === "GET" || init.method === "HEAD";
+          for (let attempt = 0; ; attempt++) {
+            try {
+              const response = await fetch(input, { ...init, cache: "no-store", signal: AbortSignal.timeout(12000) });
+              if (!read || attempt >= 2 || (response.status < 500 && response.status !== 429)) return response;
+            } catch (error) {
+              if (!read || attempt >= 2) throw error;
+            }
+            await new Promise(resolve => setTimeout(resolve, 300 * 2 ** attempt));
+          }
+        },
       },
     },
   );
