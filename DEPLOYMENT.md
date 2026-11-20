@@ -2,6 +2,8 @@
 
 This is a functioning application with intentionally empty data until an authorized source and production database are configured. A successful build is not a successful public launch or push-delivery test.
 
+Current deployment: https://nepal-metals.vercel.app. The production database, administrator account, server secrets and Supabase scheduler are configured. See `VERIFICATION.md` for the observed results and remaining source/device requirements.
+
 ## 1. Supabase
 
 Create a project near Nepal (Mumbai or Singapore). Apply, in order, both SQL files in `supabase/migrations/` using the Supabase SQL editor or `supabase db push` on a linked project. Migrations create no sample prices, users, subscriptions, or headlines.
@@ -35,9 +37,11 @@ News is disabled by default. Set `NEWS_ALLOWED_HOSTS` to exact, trusted RSS doma
 
 ## 3. GitHub and Vercel
 
-Create a dedicated private GitHub repository and push this checkout. Import it into Vercel as a Next.js project. Use Node 22 or later. The build command is `npm run build`; do not use static export. Configure the production environment before the final deployment.
+Use the dedicated GitHub repository `run22sagar/nepal-metals` (public by the owner's explicit choice). The existing Vercel project is `nepal-metals`. Use Node 22 or later. The build command is `npm run build`; do not use static export. Configure the production environment before deploying. A linked checkout can deploy with `npx vercel deploy --prod`; repository integration enables automatic deployments when connected.
 
-`vercel.json` schedules `/api/cron` every 15 minutes. Vercel sends `Authorization: Bearer CRON_SECRET` when the project secret is configured. This frequency requires a compatible paid Vercel plan. Hobby's daily-only cron limit is insufficient for a 9 AM start with repeated checks after late Nepal publications. An external authenticated scheduler is another option; it must use the same secret and execute reliably.
+`vercel.json` deliberately contains no Vercel cron. The deployed free-plan setup uses Supabase `pg_cron` and `pg_net` to call `/api/cron` every 15 minutes with `Authorization: Bearer CRON_SECRET`. In Supabase Vault, store the production origin as `nepal_metals_site_url` and the same Vercel cron secret as `nepal_metals_cron_secret`. Apply `supabase/scheduler.sql` after those secrets exist. It installs the job and restricts browser roles from the Vault and network queue, which temporarily holds authorization headers during transmission. Scheduler SQL contains no literal credentials. The named jobs can be reapplied without creating duplicate schedules.
+
+Inspect `cron.job_run_details` and `net._http_response` in the protected SQL editor to distinguish successful scheduling from successful HTTP execution. Run `select public.invoke_market_job();` to test the exact scheduler path, then inspect its HTTP response. Supabase Cron execution logs are pruned after 30 days. If the project is paused or its free quotas are exhausted, ingestion and alerts stop; monitor usage and availability. Do not move this schedule to Vercel Hobby cron, which supports only daily execution.
 
 The international adapter has a 30-minute default cache, approximately 1,488 requests in a 31-day month before retries. Daily notifications wait until today's rates exist for every selected metal. Database leases prevent overlapping jobs; unique delivery records prevent duplicate daily sends. Ambiguous transport failures are not retried automatically, so some notifications can be missed rather than duplicated. Review `unknown` or abandoned `sending` rows operationally.
 
@@ -63,8 +67,8 @@ Optional cookieless analytics are off until `NEXT_PUBLIC_ANALYTICS_DOMAIN` is se
 
 ## Costs and operational limits
 
-Provider list prices checked November 19, 2026: Vercel Pro starts at $20/month; Supabase Pro starts at $25/month; Metals.Dev Copper is $1.79/month for 2,000 requests or Silver $9.99/month for 10,000. A modest production baseline is approximately $46.79–$54.99/month, excluding taxes, domain registration, source licensing, analytics and usage overages. Confirm prices before purchasing. No paid plan has been purchased by this project.
+The current deployment uses Vercel Hobby and Supabase Free, with no paid subscription purchased: $0/month within their limits. Free hosting is a launch configuration, not an uptime guarantee; Supabase Free can pause inactive projects. Vercel Hobby is intended for personal non-commercial use, so review eligibility before monetizing the site. Metals.Dev is not activated. List prices checked November 19, 2026: Copper is $1.79/month for 2,000 requests or Silver $9.99/month for 10,000. Vercel Pro starts at $20/month and Supabase Pro at $25/month if later required. A paid baseline would be approximately $46.79–$54.99/month, excluding taxes, domain registration, source licensing, analytics and usage overages. Confirm prices and terms before purchasing.
 
-Sources: [Vercel pricing](https://vercel.com/pricing), [cron limits](https://vercel.com/docs/cron-jobs/usage-and-pricing), [Supabase pricing](https://supabase.com/pricing), [Metals.Dev pricing](https://metals.dev/pricing), [Metals.Dev terms](https://metals.dev/policy/terms), [Apple Web Push requirements](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/).
+Sources: [Vercel pricing](https://vercel.com/pricing), [cron limits](https://vercel.com/docs/cron-jobs/usage-and-pricing), [Supabase pricing](https://supabase.com/pricing), [Supabase Cron](https://supabase.com/docs/guides/cron), [scheduled HTTP calls and Vault](https://supabase.com/docs/guides/functions/schedule-functions), [Metals.Dev pricing](https://metals.dev/pricing), [Metals.Dev terms](https://metals.dev/policy/terms), [Apple Web Push requirements](https://webkit.org/blog/13878/web-push-for-web-apps-on-ios-and-ipados/).
 
 Back up production data and test restore before relying on the service. Ingestion/delivery logs are pruned after 90 days; correction audits are retained. Significant-movement alerts are not implemented; the UI offers daily alerts only. Newsletter/email/SMS, trading and e-commerce are outside scope.

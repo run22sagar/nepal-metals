@@ -29,7 +29,9 @@ export async function POST(request: Request) {
       password,
     });
     if (error || !data.session) throw new HttpError(401, "Sign-in failed");
-    const allowed = await client
+    // signInWithPassword attaches the user's JWT to its client. Use a fresh
+    // server client for the allowlist, which is intentionally private to users.
+    const allowed = await db()
       .from("admin_users")
       .select("user_id")
       .eq("user_id", data.user.id)

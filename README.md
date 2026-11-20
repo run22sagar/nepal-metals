@@ -2,7 +2,7 @@
 
 Next.js App Router application for Nepal's gold and silver reference prices, with English/Nepali pages, audited manual publishing, international spot estimates, history charts, calculators, RSS ingestion, PWA installation and consent-based web push.
 
-**Status:** production build and local tests pass. No public production deployment, real price ingestion, news-feed permission or device push delivery has yet been verified. Empty states are deliberate; there are no fabricated market records.
+**Live:** https://nepal-metals.vercel.app — deployed to Vercel with a migrated Supabase database in Mumbai, protected administrator access, and a 15-minute Supabase Cron job. Production health, administrator login/logout, and 26 public HTTP checks pass. Real price ingestion, news-feed permission and device push delivery are still unverified. Empty states are deliberate; there are no fabricated market records.
 
 ## Run locally
 

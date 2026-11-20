@@ -1,0 +1,6 @@
+.env*
+.git
+supabase/.temp
+tests
+test-results
+*.zip
