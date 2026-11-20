@@ -142,6 +142,13 @@ export function approvedFeed(url: string) {
 export function publicArticleUrl(value: string) {
   try {
     const u = new URL(value);
+    // EIA occasionally emits a detail link without its article ID. Exclude
+    // these broken source links instead of guessing which article was meant.
+    if (
+      ["www.eia.gov", "eia.gov"].includes(u.hostname) &&
+      u.pathname === "/todayinenergy/detail.php" &&
+      !/^\d+$/.test(u.searchParams.get("id") || "")
+    ) return false;
     return (
       ["http:", "https:"].includes(u.protocol) && !u.username && !u.password
     );

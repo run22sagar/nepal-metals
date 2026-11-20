@@ -4,6 +4,8 @@ Next.js App Router application for Nepal's gold and silver reference prices, wit
 
 **Live:** https://nepal-metals.vercel.app — deployed to Vercel with a migrated Supabase database in Mumbai, protected administrator access, and a 15-minute Supabase Cron job. Production health, administrator login/logout, and 26 public HTTP checks pass. Real price ingestion, news-feed permission and device push delivery are still unverified. Empty states are deliberate; there are no fabricated market records.
 
+Source: https://github.com/run22sagar/nepal-metals. GitHub Actions validates tests and builds; Vercel is connected to the repository's `main` branch.
+
 ## Run locally
 
 ```powershell

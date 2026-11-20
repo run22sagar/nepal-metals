@@ -54,6 +54,8 @@ test("news URLs reject executable schemes and non-approved feed hosts", () => {
   assert.equal(approvedFeed("http://feeds.example.com/rss"), false);
   assert.equal(publicArticleUrl("javascript:alert(1)"), false);
   assert.equal(publicArticleUrl("https://example.com/article"), true);
+  assert.equal(publicArticleUrl("https://www.eia.gov/todayinenergy/detail.php?id="), false);
+  assert.equal(publicArticleUrl("https://www.eia.gov/todayinenergy/detail.php?id=68444"), true);
   delete process.env.NEWS_ALLOWED_HOSTS;
 });
 test("failed provider ingestion preserves the previous stored observation", async () => {

@@ -16,13 +16,14 @@
 - All 26 HTTP/SSR checks passed against the public HTTPS domain. `/api/health` returned 200 with `status: ok`.
 - Real administrator password sign-in, protected publishing desk, logout, and Secure/HttpOnly/SameSite=Strict session cookie verified. Production verification found and fixed a Supabase client issue: password sign-in replaces that client's service authorization, so the private administrator allowlist must be checked with a fresh server client.
 - Production server secrets installed as sensitive Vercel variables. No secret values are committed or included in the source archive.
-- Supabase Cron has an active 15-minute job. Invoking its exact Vault-backed HTTP path returned 200 with a completed notification scan, zero recipients, no news sources, and international data marked unconfigured. This verifies connectivity and execution, not long-term scheduler reliability or device delivery.
+- Supabase Cron has an active 15-minute job. Its Vault-backed HTTP path returned 200 with a completed notification scan and international data marked unconfigured. A one-time scheduled launch check executed at 07:39 UTC, recorded `succeeded`, received HTTP 200, and removed its own temporary schedule. This verifies actual timed execution, not long-term scheduler reliability or device delivery.
 - Public browser checks: the alert dialog is enabled, the English view showed no console errors, and the Nepali page rendered at 390px with correct document language and no horizontal body overflow.
 - No synthetic prices, headlines, subscriptions or test users were inserted into production. The sole Auth user is the owner's requested administrator account.
+- Source published to https://github.com/run22sagar/nepal-metals with the owner's approval for public visibility. GitHub Actions run 44696308488 passed npm installation, the 18 tests and production build. Generated private credentials were checked against all 84 tracked files before publication; no matches were found.
 
 ## Not yet verified
 
-- A dedicated public GitHub repository has been created by the owner; source publication and repository-triggered deployment must be verified separately.
+- Vercel's GitHub repository link is now configured to `run22sagar/nepal-metals`, production branch `main`. A repository-triggered deployment still needs verification after the next push.
 - No live Metals.Dev request has run with an account key. Adapter tests use isolated synthetic fixtures only.
 - No authorized automated FENEGOSIDA feed has been established. No official Nepal price records have been published.
 - No RSS source has been approved or ingested. News remains honestly empty.
